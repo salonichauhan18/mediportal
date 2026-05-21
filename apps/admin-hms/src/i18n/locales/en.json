@@ -1,0 +1,40 @@
+{
+  "common": {
+    "dashboard": "Dashboard",
+    "scheduling": "Scheduling",
+    "patients": "Patients",
+    "billing": "Billing",
+    "pharmacy": "Pharmacy",
+    "settings": "Settings",
+    "logout": "Logout",
+    "search": "Search..."
+  },
+  "dashboard": {
+    "welcome": "Welcome back, Dr. {{name}}",
+    "revenue": "Total Revenue",
+    "appointments": "Today's Appointments",
+    "activePatients": "Active Patients",
+    "labAlerts": "Critical Lab Alerts"
+  },
+  "billing": {
+    "invoice": "Invoice",
+    "amount": "Amount",
+    "status": "Status",
+    "generate": "Generate Bill",
+    "currency": "Currency",
+    "tax": "Tax ({{name}})"
+  },
+  "insurance": {
+    "rpa": "Insurance RPA",
+    "adjudication": "Adjudication",
+    "autoSubmit": "Auto-Submission",
+    "savedRevenue": "Saved Revenue",
+    "claimAudit": "AI Claim Audit"
+  },
+  "genomics": {
+    "vault": "Genetic Data Vault",
+    "markers": "Genetic Markers",
+    "precisionMedicine": "Precision Medicine",
+    "shield": "Pharmacogenomic Shield"
+  }
+}

@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api-server/Dockerfile
+    networks:
+      - mediportal_net
+    environment:
+      - DATABASE_URL=postgresql://mediportal:mediportal_secure_prod@db:5432/mediportal_db?schema=public
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=${JWT_SECRET_PROD}
+      - PORT=4000
+      - NODE_ENV=production
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: always
+
+  admin:
+    build:
+      context: .
+      dockerfile: apps/admin-hms/Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - mediportal_net
+    depends_on:
+      - api
+    restart: always
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=mediportal
+      - POSTGRES_PASSWORD=mediportal_secure_prod
+      - POSTGRES_DB=mediportal_db
+    networks:
+      - mediportal_net
+    volumes:
+      - mediportal_prod_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mediportal -d mediportal_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    # Port 5432 is not exposed to the host for security
+
+  redis:
+    image: redis:7-alpine
+    networks:
+      - mediportal_net
+    restart: always
+    # Port 6379 is not exposed to the host for security
+
+networks:
+  mediportal_net:
+    driver: bridge
+
+volumes:
+  mediportal_prod_data:

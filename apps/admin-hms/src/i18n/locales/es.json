@@ -1,0 +1,19 @@
+{
+  "common": {
+    "dashboard": "Panel",
+    "scheduling": "Programación",
+    "patients": "Pacientes",
+    "billing": "Facturación",
+    "pharmacy": "Farmacia",
+    "settings": "Ajustes",
+    "logout": "Cerrar sesión",
+    "search": "Buscar..."
+  },
+  "dashboard": {
+    "welcome": "Bienvenido de nuevo, Dr. {{name}}",
+    "revenue": "Ingresos totales",
+    "appointments": "Citas de hoy",
+    "activePatients": "Pacientes activos",
+    "labAlerts": "Alertas críticas de laboratorio"
+  }
+}

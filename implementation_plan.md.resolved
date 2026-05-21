@@ -1,0 +1,56 @@
+# MediPortal Enterprise Monorepo Scaffolding Plan
+
+This plan details the steps to establish a production-ready monorepo foundation, local development environment, and automated CI/CD pipelines for the MediPortal Enterprise system.
+
+## User Review Required
+
+> [!IMPORTANT]
+> Please review the technology stack versions, Docker configurations, and the structure of shared packages to ensure they completely align with your requirements before we begin execution.
+
+## Proposed Changes
+
+### Phase 1: Monorepo Scaffolding (Turborepo)
+- Initialize a Turborepo workspace using `npm` as the package manager in `c:\Users\Lenovo\Desktop\medicure-management`.
+- Scaffold `/apps/public-web`: Next.js 14 App Router with TypeScript.
+- Scaffold `/apps/admin-hms`: React 18 + Vite with TypeScript.
+- Scaffold `/apps/api-server`: NestJS 10.
+- Scaffold `/packages/config-ui`: Shared Tailwind CSS styling and PostCSS configs.
+- Scaffold `/packages/database`: Shared Prisma schema and generated client for PostgreSQL.
+- Scaffold `/packages/shared-types`: Common TypeScript interfaces and Zod schemas used across the stack.
+- Configure `turbo.json` with appropriate build/lint/dev task pipelines.
+
+### Phase 2: Containerized Infrastructure (Docker)
+- Create a root `docker-compose.yml` for local development.
+- Configure PostgreSQL 16 (Primary DB) with a persistent volume and a health check.
+- Configure Redis 7 (Caching/Bull Queue) with a persistent volume and a health check.
+- Configure Elasticsearch 8 with a persistent volume, necessary environment variables (`discovery.type=single-node`), and a health check.
+- Generate `.env.example` mapping all necessary service connections.
+
+### Phase 3: Quality Gates & Linting
+- Introduce a unified ESLint config and Prettier config across the root repository, exposing configuration as shared packages or using root config depending on Turborepo pattern.
+- Implement Husky for pre-commit hooks to run linting and type-checking (using `lint-staged`).
+- Ensure all `tsconfig.json` files inherit from a strict root config or shared package, explicitly enforcing strict mode.
+
+### Phase 4: CI/CD Pipeline (GitHub Actions)
+- Create `.github/workflows/ci.yml`.
+- Set up a CI pipeline with caching and Turborepo integration.
+- Implement jobs for: 
+  - `Lint/Type-Check`
+  - `Build`
+  - `Test` (with Vitest set up as a placeholder).
+
+## Open Questions
+
+> [!WARNING]
+> - Do you have a preference for the package manager? (I will use `npm` unless `pnpm` or `yarn` is preferred. NOTE: Turborepo often works best with `pnpm`, but `npm` aligns with standard setups).
+> - Should I set up any specific Vite plugins for the `admin-hms` application (e.g., SWC, React Router)?
+
+## Verification Plan
+
+### Automated Tests
+- Run `npm run lint` and `npm run build` using turbo to ensure all workspaces compile correctly.
+- Run `npm run test` targeting Vitest placeholders to ensure test runner operates correctly.
+- Run `docker-compose up -d` and check service health via `docker ps`.
+
+### Manual Verification
+- Manually run `npm run dev` and ensure all the development servers (Next.js, Vite, NestJS) boot up on their respective ports without port collisions.

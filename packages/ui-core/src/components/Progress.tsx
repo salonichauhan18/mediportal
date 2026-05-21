@@ -1,0 +1,15 @@
+import * as React from "react"
+import { cn } from "../lib/utils"
+
+export interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <div ref={ref} className={cn("base-progress-classes", className)} {...props}>
+        Progress Component
+      </div>
+    )
+  }
+)
+Progress.displayName = "Progress"

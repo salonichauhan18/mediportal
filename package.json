@@ -1,0 +1,39 @@
+{
+  "name": "mediportal-enterprise",
+  "private": true,
+  "version": "2.0.0",
+  "packageManager": "npm@10.2.4",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0",
+    "turbo": "latest"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "@fullcalendar/core": "^6.1.20",
+    "@fullcalendar/daygrid": "^6.1.20",
+    "@fullcalendar/interaction": "^6.1.20",
+    "@fullcalendar/react": "^6.1.20",
+    "@fullcalendar/timegrid": "^6.1.20",
+    "caniuse-lite": "^1.0.30001791",
+    "lodash": "^4.18.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "zod": "^4.4.1"
+  },
+  "overrides": {
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3"
+  }
+}

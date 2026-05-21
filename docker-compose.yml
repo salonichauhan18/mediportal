@@ -1,0 +1,57 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api-server/Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - DATABASE_URL=postgresql://mediportal:mediportal123@db:5432/mediportal_db?schema=public
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=mediportal-clinical-core-secret-2026
+      - JWT_EXPIRES_IN=1d
+      - PORT=3002
+      - NODE_ENV=production
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  admin:
+    build:
+      context: .
+      dockerfile: apps/admin-hms/Dockerfile
+    ports:
+      - "3001:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=mediportal
+      - POSTGRES_PASSWORD=mediportal123
+      - POSTGRES_DB=mediportal_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - mediportal_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mediportal -d mediportal_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+volumes:
+  mediportal_pgdata:

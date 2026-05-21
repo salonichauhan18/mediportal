@@ -1,0 +1,38 @@
+name: Production Deployment
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Lint and Test
+        run: |
+          npm run lint
+          npm run test
+          
+      - name: Build Docker Images
+        run: |
+          docker build -t mediportal-api -f apps/api-server/Dockerfile .
+          docker build -t mediportal-admin -f apps/admin-hms/Dockerfile .
+
+  deploy-to-staging:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to ECS (Mock)
+        run: echo "Pushing images to ECR and triggering ECS rolling update..."
